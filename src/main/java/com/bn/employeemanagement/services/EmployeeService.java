@@ -4,6 +4,7 @@ import com.bn.employeemanagement.dto.EmployeeDto;
 import com.bn.employeemanagement.mappers.EmployeeMapper;
 import com.bn.employeemanagement.models.Employee;
 import com.bn.employeemanagement.repositories.EmployeeRepo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,11 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepo employeeRepo;
     private final EmployeeMapper employeeMapper;
-
-    public EmployeeService(EmployeeRepo employeeRepo,
-                           EmployeeMapper mapper) {
-        this.employeeRepo = employeeRepo;
-        employeeMapper = mapper;
-    }
 
     public List<Employee> getAllEmployees() {
         return employeeRepo.findAll();

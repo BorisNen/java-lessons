@@ -1,9 +1,13 @@
 package com.bn.employeemanagement.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
+@Data
 public class Employee {
 
     @Id
@@ -19,36 +23,15 @@ public class Employee {
     @Column(name = "employee_number")
     private Integer employeeNum; // employee_num
 
-    public String getFirstName() {
-        return firstName;
-    }
+    @ManyToOne()
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getEmployeeNum() {
-        return employeeNum;
-    }
-
-    public void setEmployeeNum(Integer employeeNum) {
-        this.employeeNum = employeeNum;
-    }
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "employee_projects",
+        joinColumns = @JoinColumn(name = "employee_id"),
+        inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Projects> projects;
 }
