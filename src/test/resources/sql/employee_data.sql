@@ -1,0 +1,1 @@
+INSERT INTO employee(first_name, last_name, employee_number) VALUES ('John', 'Travolta', 123);
