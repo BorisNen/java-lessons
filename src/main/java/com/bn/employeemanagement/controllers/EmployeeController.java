@@ -1,6 +1,7 @@
 package com.bn.employeemanagement.controllers;
 
 import com.bn.employeemanagement.dto.EmployeeDto;
+import com.bn.employeemanagement.models.Department;
 import com.bn.employeemanagement.models.Employee;
 import com.bn.employeemanagement.services.EmployeeService;
 import com.bn.employeemanagement.services.MessageService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +26,20 @@ public class EmployeeController {
     private final MessageService messageService;
 
     @GetMapping("/fetch/employees")
+    @Deprecated
     public List<Employee> fetchEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/fetch/async")
+    public Map<String, ?> fetchAsync() throws ExecutionException, InterruptedException {
+        System.out.println("\u001B[35m" + " " + Thread.currentThread().getName());
+        CompletableFuture<List<Employee>> employeesFuture = CompletableFuture.supplyAsync(employeeService::getAllEmployees);
+        CompletableFuture<List<Department>> departmentsFuture = CompletableFuture.supplyAsync(employeeService::getAllDepartments);
+
+        return CompletableFuture.allOf(employeesFuture, departmentsFuture).thenApply(r ->
+            Map.of("employees", employeesFuture.join(), "departments", departmentsFuture.join())
+        ).get();
     }
 
     @GetMapping("/page/employees")

@@ -27,7 +27,13 @@ public class EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     public List<Employee> getAllEmployees() {
+        System.out.println("\u001B[31m" + " " + Thread.currentThread().getName());
         return employeeRepo.findAll();
+    }
+
+    public List<Department> getAllDepartments() {
+        System.out.println("\u001B[32m" + " " + Thread.currentThread().getName());
+        return departmentRepo.findAll();
     }
 
     public Page<Employee> getAllEmployees(Pageable pageable) {
